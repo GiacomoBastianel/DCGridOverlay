@@ -41,6 +41,12 @@ selected_timesteps_RES_time_series = Dict{String,Any}()
 selected_timesteps_load_time_series = Dict{String,Any}()
 result_timesteps = Dict{String,Any}()
 
+#MAX LOAD/RES: 475
+#max LOAD ratio: 1124
+#max congestion: 1258
+#Min RES: 6363
+
+#timesteps = ["475","1124","1258","6363"]
 
 timesteps = collect(1:8760)
 

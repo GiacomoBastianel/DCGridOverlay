@@ -52,15 +52,51 @@ function compute_SOx_emissions(grid,number_of_hours,results_dict,vector)
     end
 end
 
-function compute_congestions(grid,number_of_hours,results_dict,vector)
+function compute_congestions(grid,number_of_hours,results_dict,vector,branches)
     for i in 1:number_of_hours
-        branches = []
+        branches["$i"] = []
         for (g_id,g) in grid["branch"]
-            push!(branches, [g_id,abs(results_dict["$i"]["solution"]["branch"][g_id]["pt"])/g["rate_a"]])
+            push!(branches["$i"], [g_id,abs(results_dict["$i"]["solution"]["branch"][g_id]["pt"])/g["rate_a"]])
         end
-        push!(vector,findmax(branches))
+        push!(vector,findmax(branches["$i"]))
     end
 end
+
+function compute_congestions_HVDC(grid,number_of_hours,results_dict,vector,branches)
+    for i in 1:number_of_hours
+        branches["$i"] = []
+        for (g_id,g) in grid["branchdc"]
+            if g_id == "9" || g_id == "10" || g_id == "11" 
+            else
+                push!(branches["$i"], [g_id,abs(results_dict["$i"]["solution"]["branchdc"][g_id]["pt"])/g["rateA"]])
+            end
+        end
+        push!(vector,findmax(branches["$i"]))
+    end
+end
+
+function compute_congestions_line_AC(grid,number_of_hours,results_dict,branches,n_branch)
+    for i in 1:number_of_hours
+        branches["$i"] = Dict{String,Any}()
+        for (g_id,g) in grid["branch"]
+            if g_id == "$n_branch"
+               branches["$i"] = deepcopy(results_dict["$i"]["solution"]["branch"][g_id]["pt"]/g["rate_a"])
+            end
+        end
+    end
+end
+
+function compute_congestions_line_HVDC(grid,number_of_hours,results_dict,branches,n_branchdc)
+    for i in 1:number_of_hours
+        branches["$i"] = Dict{String,Any}()
+        for (g_id,g) in grid["branchdc"]
+            if g_id == "$n_branchdc"
+               branches["$i"] = deepcopy(results_dict["$i"]["solution"]["branchdc"][g_id]["pt"]/g["rateA"])
+            end
+        end
+    end
+end
+
 
 function gen_values()
     gen_costs = Dict{String, Any}( # €/MWh
