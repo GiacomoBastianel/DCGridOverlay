@@ -481,3 +481,24 @@ function assigning_gen_values(grid_m)
     return grid_m
 end
 
+function compute_energy_through_a_line(number_of_hours,results_dict,n_branch,sum_)
+    for i in 1:number_of_hours
+        for (g_id,g) in results_dict["$i"]["solution"]["branch"]
+            if g_id == "$n_branch"
+               sum_ = sum_ + abs(results_dict["$i"]["solution"]["branch"][g_id]["pt"])
+            end
+        end
+    end
+    return sum_
+end
+
+function compute_energy_through_a_dc_line(number_of_hours,results_dict,n_branch,sum_)
+    for i in 1:number_of_hours
+        for (g_id,g) in results_dict["$i"]["solution"]["branchdc"]
+            if g_id == "$n_branch"
+               sum_ = sum_ + abs(results_dict["$i"]["solution"]["branchdc"][g_id]["pt"])
+            end
+        end
+    end
+    return sum_
+end

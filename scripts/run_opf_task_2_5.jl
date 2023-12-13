@@ -8,7 +8,8 @@ using PowerModels; const _PM = PowerModels
 using PowerModelsACDC; const _PMACDC = PowerModelsACDC
 using JSON
 using JuMP
-using Ipopt, Gurobi
+using Ipopt 
+using Gurobi
 using DataFrames, CSV
 include("create_grid_and_opf_functions.jl")
 
@@ -18,7 +19,12 @@ conv_power = 6.0
 test_case_file = "DC_overlay_grid_$(conv_power)_GW_convdc.json"
 test_case = _PM.parse_file("./test_cases/$test_case_file")
 
+
 s = Dict("output" => Dict("branch_flows" => true), "conv_losses_mp" => true)
+
+try_ = _PMACDC.run_acdcopf(test_case,ACPPowerModel,ipopt; setting = s)
+
+
 start_hour = 1
 number_of_hours = 8760
 
@@ -103,6 +109,7 @@ end
 ########################################################################
 
 result_ac, demand_series = solve_opf_timestep(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
+
 
 #result_dc, demand_series = solve_opf_timestep_dc(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
 

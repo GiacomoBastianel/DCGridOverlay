@@ -45,8 +45,8 @@ obj_ac_dc = sum(r["objective"]*100 for (r_id,r) in results_AC_DC)
 
 benefit = (obj_ac - obj_ac_dc)/10^9
 
-print("The total generation costs for the selected year for the AC/DC grid are $(obj_ac_dc) billions")
-print("The total generation costs for the selected year for the AC grid are $(obj_ac) billions")
+print("The total generation costs for the selected year for the AC/DC grid are $(obj_ac_dc/10^9) billions")
+print("The total generation costs for the selected year for the AC grid are $(obj_ac/10^9) billions")
 print("The total benefits for the selected year are $(benefit) billions")
 
 ########################################################################
@@ -191,10 +191,28 @@ p3 = Plots.scatter(hourly_RES_ac_dc_TWh, congestion_6_hvdc, label="data", legend
 
 p4 = Plots.plot(p2,p3,layout = (2,1))
 
+#=
 type = "AC_DC_AC_DC"
 number = "3_6"
 plot_filename = "$(dirname(@__DIR__))/results/figures/$(type)_branch_$(number).pdf"
 Plots.savefig(p4, plot_filename)
+=#
 
+for (g_id,g) in test_case["gen"]
+    if length(g["cost"]) > 0
+        print(g["type"],"  ",g_id,"  ",g["cost"][1],"\n")
+    else
+        print(g["type"],"  ",g_id,"  0.0","\n")
+    end
+end
 
+tot_ac = compute_energy_through_a_line(8760,results_AC,6,0)
+
+TWh_ac = tot_ac*100/10^(3) # GWh
+
+tot_ac_ac_dc = compute_energy_through_a_line(8760,results_AC_DC,6,0)
+tot_dc_ac_dc = compute_energy_through_a_dc_line(8760,results_AC_DC,6,0)
+
+TWh_ac_ac_dc = tot_ac_ac_dc*100/10^(3) # GWh
+TWh_dc_ac_dc = tot_dc_ac_dc*100/10^(3) # GWh
 

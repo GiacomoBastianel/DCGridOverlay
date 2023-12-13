@@ -8,7 +8,7 @@ using PowerModels; const _PM = PowerModels
 using PowerModelsACDC; const _PMACDC = PowerModelsACDC
 using JSON
 using JuMP
-using Ipopt, Gurobi
+using Ipopt#, Gurobi
 using DataFrames, CSV
 include("create_grid_and_opf_functions.jl")
 
@@ -50,7 +50,7 @@ timesteps = ["475"]
 #timesteps = ["475","6363"]
 #timesteps = ["475","1124","1258","6363"]
 
-timesteps = collect(1:8760)
+#timesteps = collect(1:8760)
 
 for l in timesteps
     if typeof(l) == String
@@ -118,7 +118,7 @@ end=#
 
 result_ac, demand_series = solve_opf_timestep(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
 
-result_dc, demand_series = solve_opf_timestep_dc(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
+#result_dc, demand_series = solve_opf_timestep_dc(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
 
 
 #save("C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\supernode\\HVDC_HVAC_AC_powerflows_6GW.jld2",result_ac)
