@@ -20,8 +20,8 @@ test_case = _PM.parse_file("./test_cases/$test_case_file")
 ########################################################################
 # Uploading results
 ########################################################################
-results_file_ac = "/Users/giacomobastianel/.julia/dev/DCGridOverlay/results/result_one_year_AC_grid.json"
-results_file_ac_dc = "/Users/giacomobastianel/.julia/dev/DCGridOverlay/results/result_one_year_AC_DC_grid.json"
+results_file_ac = "/Users/giacomobastianel/Library/CloudStorage/OneDrive-KULeuven/DC overlay - SuperNode/results/result_one_year_AC_grid.json"
+results_file_ac_dc = "/Users/giacomobastianel/Library/CloudStorage/OneDrive-KULeuven/DC overlay - SuperNode/results/result_one_year_AC_DC_grid.json"
 
 results_AC = Dict()
 open(results_file_ac, "r") do f
@@ -160,6 +160,8 @@ line_7_ac_dc = Dict{String,Any}()
 compute_congestions_line_AC(test_case,8760,results_AC,line_7_ac,7)
 compute_congestions_line_AC(test_case,8760,results_AC_DC,line_7_ac_dc,7)
 
+congestion_ac_7 = []
+congestion_ac_dc_7 = []
 
 for i in 1:8760
     push!(congestion_ac_7,line_7_ac["$i"])
@@ -191,12 +193,12 @@ p3 = Plots.scatter(hourly_RES_ac_dc_TWh, congestion_6_hvdc, label="data", legend
 
 p4 = Plots.plot(p2,p3,layout = (2,1))
 
-#=
-type = "AC_DC_AC_DC"
-number = "3_6"
-plot_filename = "$(dirname(@__DIR__))/results/figures/$(type)_branch_$(number).pdf"
-Plots.savefig(p4, plot_filename)
-=#
+
+type = "AC_AC"
+number = "6"
+plot_filename = "$(dirname(@__DIR__))/results/figures/$(type)_branch_$(number).svg"
+Plots.savefig(p1, plot_filename)
+
 
 for (g_id,g) in test_case["gen"]
     if length(g["cost"]) > 0
