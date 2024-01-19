@@ -114,7 +114,7 @@ result_ac, demand_series = solve_opf_timestep(test_case,selected_timesteps_RES_t
 #result_dc, demand_series = solve_opf_timestep_dc(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
 
 json_string = JSON.json(result_ac)
-open("./results/result_one_year_AC_grid.json","w") do f
+open("/Users/giacomobastianel/Library/CloudStorage/OneDrive-KULeuven/DC overlay - SuperNode/results/result_one_year_AC_grid_corrected.json","w") do f
     JSON.write(f, json_string)
 end
 

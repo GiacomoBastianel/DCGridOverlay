@@ -8,8 +8,9 @@ using PowerModels; const _PM = PowerModels
 using PowerModelsACDC; const _PMACDC = PowerModelsACDC
 using JSON
 using JuMP
-using Ipopt#, Gurobi
+using Ipopt, Gurobi
 using DataFrames, CSV
+
 include("create_grid_and_opf_functions.jl")
 
 #########################################################################################################################
@@ -86,10 +87,16 @@ for l in timesteps
     end
 end
 
+
+test_case["convdc"]["22"]["status"] = 0
+
 # Losing DC branch 3
 #test_case["branchdc"]["3"]["rateA"] = 0.0
 #test_case["branchdc"]["4"]["rateA"] = 0.0
 
+# Adding VOLL generator
+#test_case["gen"]["26"]["pmax"] = 99.99
+#test_case["gen"]["26"]["cost"] = 10000.0
 
 #####################################################################
 #Only for testing purposes - to rapidly adjust infrastructure values#
@@ -116,7 +123,7 @@ end=#
 ########################################################################
 ########################################################################
 
-result_ac, demand_series = solve_opf_timestep(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
+result_conv_22, demand_series = solve_opf_timestep(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
 
 #result_dc, demand_series = solve_opf_timestep_dc(test_case,selected_timesteps_RES_time_series,selected_timesteps_load_time_series,timesteps,conv_power)
 
@@ -129,9 +136,9 @@ result_ac, demand_series = solve_opf_timestep(test_case,selected_timesteps_RES_t
 ############################################################################################################
 # printing the csv files for strathclyde
 ############################################################################################################
-result_folder = "MaxLoadRESratio"
+result_folder = "conv22Loss"
 
-results_dict = result_dc
+results_dict = result_conv_22
 
 #Generator description
 P_max=[test_case["gen"][string(g)]["pmax"] for g in sort(parse.(Int64,keys(last(first(results_dict))["solution"]["gen"])))]

@@ -22,6 +22,37 @@ function compute_RES_generation(grid,number_of_hours,results_dict,vector)
     end
 end
 
+function compute_RES_generation_per_zone(grid,number_of_hours,results_dict,vector, zone)
+    for i in 1:number_of_hours
+        sum_ = 0
+        for (g_id,g) in grid["gen"]
+            if g["gen_bus"] == zone
+                if g["type"] != "VOLL" || g["type"] != "Conventional" 
+                    sum_ = sum_ + results_dict["$i"]["solution"]["gen"][g_id]["pg"]*100
+                end
+            end
+        end
+        push!(vector,sum_)
+    end
+end
+
+function compute_non_RES_generation_per_zone(grid,number_of_hours,results_dict,vector, zone)
+    for i in 1:number_of_hours
+        sum_ = 0
+        for (g_id,g) in grid["gen"]
+            if g["gen_bus"] == zone
+                if g["type"] == "VOLL" || g["type"] == "Conventional" 
+                    sum_ = sum_ + results_dict["$i"]["solution"]["gen"][g_id]["pg"]*100
+                end
+            end
+        end
+        push!(vector,sum_)
+    end
+end
+
+
+
+
 function compute_CO2_emissions(grid,number_of_hours,results_dict,vector)
     for i in 1:number_of_hours
         sum_ = 0
