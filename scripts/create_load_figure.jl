@@ -28,7 +28,7 @@ Plots.plot!(hours, group_5, legend=:outertopright, label = "\$Zone~5\$",seriesal
 Plots.plot!(hours, group_6, legend=:outertopright, label = "\$Zone~6\$",seriesalpha = 0.5,xlabel = "\$Hours\$",xguidefontsize=10,xtickfont = "Computer Modern",ylabel = "\$Demand~[GW]\$",yguidefontsize=10,ytickfont = font(8,"Computer Modern"),ylims=[0,200],xlims=[1,8760])#,title = "Power flow through AC branch 3 for different RES levels, only AC grid",titlefont = font(10,"Computer Modern"))
 
 
-plot_filename = "/Users/giacomobastianel/Library/CloudStorage/OneDrive-KULeuven/DC overlay - SuperNode/Report/Figures/Load.pdf"
+plot_filename = "/Users/giacomobastianel/Library/CloudStorage/OneDrive-KULeuven/DC overlay - SuperNode/Report/Figures/Load.svg"
 
 Plots.savefig(p5_10, plot_filename)
 
@@ -46,7 +46,7 @@ total_load = group_1+group_2+group_3+group_4+group_5+group_6
 
 load_over_res = total_load./total_res
 
-ratio = Plots.plot(hours,load_over_res,xlabel = "\$Hours\$",legend=:none,xguidefontsize=10,xtickfont = "Computer Modern",ylabel = "\$Total~load/total~RES~generation~[-]\$",yguidefontsize=10,ytickfont = font(8,"Computer Modern"),ylims=[0,5.5],xlims=[1,8760])
+ratio = Plots.plot(hours,load_over_res,xlabel = "Hours",legend=:none,xguidefontsize=10,xtickfont = "Computer Modern",ylabel = "Total load/ Total RES generation [-]",yguidefontsize=10,ytickfont = font(8,"Computer Modern"),ylims=[0,5.5],xlims=[1,8760])
 
 # Proof that timestep 475 is the one with the maximum value
 maximum(total_load./total_res)

@@ -93,6 +93,26 @@ function compute_congestions(grid,number_of_hours,results_dict,vector,branches)
     end
 end
 
+function compute_congestions_no_abs(grid,number_of_hours,results_dict,vector,branches)
+    for i in 1:number_of_hours
+        branches["$i"] = []
+        for (g_id,g) in grid["branch"]
+            push!(branches["$i"], [g_id,results_dict["$i"]["solution"]["branch"][g_id]["pt"]/g["rate_a"]])
+        end
+        push!(vector,findmax(branches["$i"]))
+    end
+end
+
+function compute_congestions_utilization_no_abs(grid,number_of_hours,results_dict,vector,branches)
+    for i in 1:number_of_hours
+        branches["$i"] = []
+        for (g_id,g) in grid["branch"]
+            push!(branches["$i"], [g_id,results_dict["$i"]["solution"]["branch"][g_id]["pt"]])
+        end
+        push!(vector,findmax(branches["$i"]))
+    end
+end
+
 function compute_congestions_HVDC(grid,number_of_hours,results_dict,vector,branches)
     for i in 1:number_of_hours
         branches["$i"] = []
